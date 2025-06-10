@@ -4,9 +4,6 @@ import { LoaderError } from '@/types/loader-error';
 import { QueryData, executeQuery } from '@/db/execute-query';
 import { OrganizationsTable, OrganizationData, organizationsCountQuery, organizationsQuery, OrganizationCountData } from './organizations/components/OrganizationsTable';
 import { WithErrorHandling } from '@/components/hoc/error-handling-wrapper/error-handling-wrapper';
-import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { Home, Building2 } from 'lucide-react';
-import { Link } from '@remix-run/react';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -65,44 +62,19 @@ export default function OrganizationsPage() {
   const queryDataToRender = organizationsFetcher.data || initialLoaderData;
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <Sidebar>
-        <SidebarHeader>
-          <Link to="/" className="flex items-center gap-2 font-semibold">
-            <Home className="h-6 w-6" />
-            <span>Home</span>
-          </Link>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            <SidebarMenuButton asChild>
-              <Link to="/organizations">
-                <Building2 />
-                <span>Organizations</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenu>
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-[57px] items-center gap-1 border-b bg-background px-4">
-          <SidebarTrigger />
-          <h1 className="text-xl font-semibold">Organizations Dashboard</h1>
-        </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-          <WithErrorHandling
-            queryData={queryDataToRender}
-            render={(data) => (
-              <OrganizationsTable
-                organizations={data.organizations}
-                organizationsCount={data.organizationsCount}
-                isLoading={organizationsFetcher.state === 'submitting'}
-                onFiltersChange={handleOrganizationsTableFiltersChange}
-              />
-            )}
+    <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+      <h1 className="text-xl font-semibold">Organizations Dashboard</h1>
+      <WithErrorHandling
+        queryData={queryDataToRender}
+        render={(data) => (
+          <OrganizationsTable
+            organizations={data.organizations}
+            organizationsCount={data.organizationsCount}
+            isLoading={organizationsFetcher.state === 'submitting'}
+            onFiltersChange={handleOrganizationsTableFiltersChange}
           />
-        </main>
-      </SidebarInset>
-    </SidebarProvider>
+        )}
+      />
+    </main>
   );
 }
